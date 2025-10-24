@@ -1,8 +1,8 @@
 {
   "name": "ad-ecom-assignment",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Build a secure and modular E-Commerce backend system using NestJS, focusing on user management, authentication & authorization, and order operations protected by NestJS guards.",
+  "author": "Ajinkya Devasthali",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.1",
@@ -28,7 +29,6 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
-    "dotenv": "^17.2.3",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

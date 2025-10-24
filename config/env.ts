@@ -1,6 +1,3 @@
-import * as dotenv from 'dotenv';
-dotenv.config({ path: '../../.env' });
-
 export const env = {
   pgdb: {
     host: process.env.POSTGRES_HOST || 'localhost',

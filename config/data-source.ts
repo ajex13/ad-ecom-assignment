@@ -1,6 +1,5 @@
 import { env } from './env';
-import { DataSourceOptions } from 'typeorm';
-import { DataSource } from 'typeorm/browser';
+import { DataSourceOptions, DataSource } from 'typeorm';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
