@@ -1,12 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { UserSignupDto } from './dto/user-signup.dto';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
+import { UserLoginDto } from './dto/user-login.dto';
 
 @Injectable()
 export class UsersService {
@@ -41,23 +40,47 @@ export class UsersService {
     });
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async login(userLoginDto: UserLoginDto) {
+    const { email, password } = userLoginDto;
+
+    const foundUser = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!foundUser) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    const passwordsMatch = await compare(password, foundUser.password);
+
+    if (!passwordsMatch) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    return plainToInstance(UserEntity, foundUser, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const users = await this.userRepository.find();
+
+    return plainToInstance(UserEntity, users, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return plainToInstance(UserEntity, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.userRepository.delete(id);
   }
 }
