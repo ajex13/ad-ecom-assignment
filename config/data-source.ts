@@ -9,8 +9,8 @@ export const dataSourceOptions: DataSourceOptions = {
   password: env.pgdb.password,
   database: env.pgdb.name,
   entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: [],
-  synchronize: true,
+  migrations: ['dist/db/migrations/*{.ts,.js}'],
+  synchronize: false,
   logging: false,
 };
 
