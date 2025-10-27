@@ -6,6 +6,8 @@ import { UserSignupDto } from './dto/user-signup.dto';
 import { compare, hash } from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { UserLoginDto } from './dto/user-login.dto';
+import { sign } from 'jsonwebtoken';
+import { env } from 'config/env';
 
 @Injectable()
 export class UsersService {
@@ -59,9 +61,7 @@ export class UsersService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    return plainToInstance(UserEntity, foundUser, {
-      excludeExtraneousValues: true,
-    });
+    return foundUser;
   }
 
   async findAll() {
@@ -82,5 +82,10 @@ export class UsersService {
 
   remove(id: number) {
     return this.userRepository.delete(id);
+  }
+
+  issueAccessToken(userEntity: UserEntity) {
+    const { email, password } = userEntity;
+    return sign({ email, password }, env.jwt.secret, { expiresIn: '1hr' });
   }
 }
