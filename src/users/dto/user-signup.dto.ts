@@ -1,17 +1,14 @@
-import { IsEmail, IsEmpty, IsStrongPassword } from "class-validator";
+import { IsEmail, IsNotEmpty, IsStrongPassword } from 'class-validator';
 
 export class UserSignupDto {
-  @IsEmpty()
+  @IsNotEmpty({ message: 'name cannot be empty' })
   name: string;
 
-  @IsEmpty()
+  @IsNotEmpty({ message: 'email cannot be empty' })
   @IsEmail()
   email: string;
 
-  @IsEmpty()
+  @IsNotEmpty({ message: 'password cannot be empty' })
   @IsStrongPassword()
   password: string;
-
-  
-  
 }
