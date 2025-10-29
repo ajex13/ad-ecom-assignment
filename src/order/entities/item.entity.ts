@@ -2,32 +2,24 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   Timestamp,
 } from 'typeorm';
-import { UserEntity } from 'src/users/entities/user.entity';
 
-@Entity('orders')
-export class Order {
+@Entity('items')
+export class Item {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id: number;
 
   @Column()
-  totalAmount: number;
+  name: string;
 
   @Column()
-  status: string;
-
-  @Column()
-  items: string[];
+  price: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Timestamp;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updateAt: Timestamp;
-
-  @ManyToOne(() => UserEntity, (user) => user.orders)
-  user: UserEntity;
 }

@@ -1,9 +1,11 @@
 import { Exclude, Expose } from 'class-transformer';
+import { Order } from 'src/order/entities/order.entity';
 import { Roles } from 'src/users/common/user-roles.enum';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
 } from 'typeorm';
@@ -37,4 +39,8 @@ export class UserEntity {
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Expose({ groups: ['admin'] })
   updateAt: Timestamp;
+
+  @OneToMany(() => Order, (order) => order.user)
+  @Expose()
+  orders: Order[];
 }
