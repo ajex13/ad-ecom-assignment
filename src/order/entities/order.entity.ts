@@ -19,7 +19,7 @@ export class Order {
   @Column()
   status: string;
 
-  @Column()
+  @Column('jsonb')
   items: string[];
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
