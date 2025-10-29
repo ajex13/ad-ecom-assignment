@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
@@ -6,14 +10,14 @@ import { UserSignupDto } from './dto/user-signup.dto';
 import { compare, hash } from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { UserLoginDto } from './dto/user-login.dto';
-import { sign } from 'jsonwebtoken';
-import { env } from 'config/env';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private jwtService: JwtService,
   ) {}
 
   async signup(userSignupDto: UserSignupDto) {
@@ -90,6 +94,6 @@ export class UsersService {
 
   issueAccessToken(userEntity: UserEntity) {
     const { email, password } = userEntity;
-    return sign({ email, password }, env.jwt.secret, { expiresIn: '1hr' });
+    return this.jwtService.signAsync({ email, password });
   }
 }

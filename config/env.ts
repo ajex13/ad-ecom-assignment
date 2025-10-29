@@ -13,5 +13,6 @@ export const env = {
   jwt: {
     secret: process.env.ACCESS_TOKEN_KEY || '',
     expiry: process.env.ACCESS_TOKEN_EXPIRY || '30m',
+    public_key: process.env.PUBLIC_KEY || '',
   },
 };
