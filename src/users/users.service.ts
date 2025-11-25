@@ -92,6 +92,10 @@ export class UsersService {
     return this.userRepository.delete(id);
   }
 
+  async findByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
   issueAccessToken(userEntity: UserEntity) {
     const { email, password } = userEntity;
 
