@@ -10,14 +10,14 @@ import { UserSignupDto } from './dto/user-signup.dto';
 import { compare, hash } from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { UserLoginDto } from './dto/user-login.dto';
-import { JwtService } from '@nestjs/jwt';
+import { env } from 'config/env';
+import { sign } from 'jsonwebtoken';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
-    private jwtService: JwtService,
   ) {}
 
   async signup(userSignupDto: UserSignupDto) {
@@ -94,6 +94,11 @@ export class UsersService {
 
   issueAccessToken(userEntity: UserEntity) {
     const { email, password } = userEntity;
-    return this.jwtService.signAsync({ email, password });
+
+    if (!email || !password) {
+      throw new BadRequestException('Cannot issue token');
+    }
+
+    return sign({ email, password }, env.jwt.secret, { expiresIn: '1hr' });
   }
 }
