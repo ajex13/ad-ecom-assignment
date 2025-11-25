@@ -12,7 +12,18 @@ async function bootstrap() {
       'Build a secure and modular E-Commerce backend system using NestJS, focusing on user management, authentication & authorization, and order operations protected by NestJS guards.',
     )
     .setVersion('1.0')
+    // Register bearer auth for Swagger UI (Authorize button)
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter JWT token (without the "Bearer " prefix)',
+      },
+      'bearer',
+    )
     .build();
+
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, documentFactory);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
