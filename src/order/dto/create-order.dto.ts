@@ -1,6 +1,12 @@
+import { IsString, IsNotEmpty, IsArray, ArrayNotEmpty } from 'class-validator';
+
 export class CreateOrderDto {
-  totalAmount: number;
+  @IsString()
+  @IsNotEmpty()
   status: string;
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
   items: string[];
-  userId: string;
 }

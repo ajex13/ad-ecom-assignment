@@ -11,7 +11,12 @@ import { UsersService } from './users.service';
 import { UserSignupDto } from './dto/user-signup.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { Roles } from './common/roles.decorator';
+import { Role } from './common/user-roles.enum';
+import { RoleGuard } from 'src/guards/role.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth('bearer')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -31,7 +36,8 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(AuthGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RoleGuard)
   findAll() {
     return this.usersService.findAll();
   }

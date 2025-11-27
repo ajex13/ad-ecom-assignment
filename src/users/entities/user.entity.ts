@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Order } from 'src/order/entities/order.entity';
-import { Roles } from 'src/users/common/user-roles.enum';
+import { Role } from 'src/users/common/user-roles.enum';
 import {
   Column,
   CreateDateColumn,
@@ -28,9 +28,9 @@ export class UserEntity {
   @Exclude()
   password: string;
 
-  @Column({ type: 'enum', enum: Roles, array: true, default: [Roles.CUSTOMER] })
+  @Column({ type: 'enum', enum: Role, array: true, default: [Role.CUSTOMER] })
   @Expose()
-  role: Roles[];
+  role: Role[];
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Expose({ groups: ['admin'] })
