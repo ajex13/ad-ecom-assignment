@@ -15,6 +15,7 @@ import { Roles } from './common/roles.decorator';
 import { Role } from './common/user-roles.enum';
 import { RoleGuard } from 'src/guards/role.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @ApiBearerAuth('bearer')
 @Controller('users')
@@ -40,6 +41,13 @@ export class UsersController {
   @UseGuards(AuthGuard, RoleGuard)
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Post(':id/update-role')
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RoleGuard)
+  updateRole(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
+    return this.usersService.updateRole(+id, updateRoleDto);
   }
 
   @Get(':id')

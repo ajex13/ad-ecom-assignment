@@ -12,6 +12,7 @@ import { plainToInstance } from 'class-transformer';
 import { UserLoginDto } from './dto/user-login.dto';
 import { env } from 'config/env';
 import { sign } from 'jsonwebtoken';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class UsersService {
@@ -94,6 +95,22 @@ export class UsersService {
 
   async findByEmail(email: string) {
     return this.userRepository.findOne({ where: { email } });
+  }
+
+  async updateRole(id: number, updateRoleDto: UpdateRoleDto) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    user.role = updateRoleDto.role;
+
+    const updatedUser = await this.userRepository.save(user);
+
+    return plainToInstance(UserEntity, updatedUser, {
+      excludeExtraneousValues: true,
+    });
   }
 
   issueAccessToken(userEntity: UserEntity) {
