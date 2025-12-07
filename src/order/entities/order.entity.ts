@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
 } from 'typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { Item } from './item.entity';
 
 @Entity('orders')
 export class Order {
@@ -14,13 +16,10 @@ export class Order {
   id: string;
 
   @Column()
-  totalAmount: number;
-
-  @Column()
   status: string;
 
-  @Column('jsonb')
-  items: string[];
+  @OneToMany(() => Item, (item) => item.order, { cascade: true })
+  items: Item[];
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Timestamp;
