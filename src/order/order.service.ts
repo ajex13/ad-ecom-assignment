@@ -21,9 +21,14 @@ export class OrderService {
   async create(createOrderDto: CreateOrderDto, user?: UserEntity) {
     // associate the order with the authenticated user if provided
 
+    const { items, totalAmount } = await this.getItemsFromSimpleArray(
+      createOrderDto.items,
+    );
+
     const payload: Partial<Order> = {
       status: createOrderDto.status,
-      items: await this.getItemsFromSimpleArray(createOrderDto.items),
+      items,
+      totalAmount,
     };
 
     if (user) {
@@ -102,9 +107,15 @@ export class OrderService {
 
     order.status = updateOrderDto.status ?? order.status;
 
-    order.items = updateOrderDto.items
-      ? await this.getItemsFromSimpleArray(updateOrderDto.items)
-      : order.items;
+    if (updateOrderDto.items) {
+      const { items, totalAmount } = await this.getItemsFromSimpleArray(
+        updateOrderDto.items,
+      );
+
+      order.items = items;
+
+      order.totalAmount = totalAmount;
+    }
 
     const savedOrder = await this.orderRepository.save(order);
 
@@ -129,11 +140,22 @@ export class OrderService {
     return this.orderRepository.delete(id);
   }
 
-  async getItemsFromSimpleArray(items: string[]): Promise<Item[]> {
+  async getItemsFromSimpleArray(
+    items: string[],
+  ): Promise<{ items: Item[]; totalAmount: number }> {
+    if (items.length === 0) {
+      return { items: [], totalAmount: 0 };
+    }
+
     const foundItems = await this.itemRepository.findBy({
       id: In(items),
     });
 
-    return foundItems;
+    const totalAmount = foundItems.reduce(
+      (sum, item) => sum + Number(item.price),
+      0,
+    );
+
+    return { items: foundItems, totalAmount };
   }
 }

@@ -16,6 +16,9 @@ export class Order {
   id: string;
 
   @Column()
+  totalAmount: number;
+
+  @Column()
   status: string;
 
   @OneToMany(() => Item, (item) => item.order, { cascade: true })
