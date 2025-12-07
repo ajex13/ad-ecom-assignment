@@ -1,5 +1,4 @@
-import { ArrayNotEmpty, IsArray, IsNotEmpty } from 'class-validator';
-import { IsString } from 'class-validator/types/decorator/typechecker/IsString';
+import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateOrderDto {
   @IsString()
